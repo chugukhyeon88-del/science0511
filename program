@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>과학의 날 부스 체험 신청 — 순천 왕지초</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;background:#f5f5f7;color:#1d1d1f;min-height:100vh}
+.wrap{max-width:740px;margin:0 auto;padding:1rem}
+.header{text-align:center;padding:1.8rem 1rem 1.2rem;margin-bottom:1.5rem;background:#fff;border-radius:16px;border:1px solid #e5e5ea;margin-top:1rem}
+.header h1{font-size:20px;font-weight:600;color:#1d1d1f}
+.header p{font-size:13px;color:#6e6e73;margin-top:5px}
+.tabs{display:flex;border:1px solid #d1d1d6;border-radius:10px;overflow:hidden;margin-bottom:1.5rem;background:#fff}
+.tab{flex:1;padding:10px 4px;font-size:12px;font-weight:500;text-align:center;cursor:pointer;background:#fff;color:#6e6e73;border:none;border-right:1px solid #d1d1d6;transition:all 0.15s}
+.tab:last-child{border-right:none}
+.tab.active{background:#534AB7;color:#fff}
+.page{display:none}.page.active{display:block}
+.card{background:#fff;border-radius:16px;border:1px solid #e5e5ea;padding:1.2rem;margin-bottom:1rem}
+.section-label{font-size:11px;font-weight:600;color:#6e6e73;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+input[type=text]{width:100%;padding:10px 14px;font-size:15px;border:1px solid #d1d1d6;border-radius:10px;background:#fff;color:#1d1d1f;transition:border-color 0.15s}
+input[type=text]:focus{outline:none;border-color:#534AB7;box-shadow:0 0 0 3px rgba(83,74,183,0.12)}
+.hint{font-size:12px;color:#6e6e73;margin-bottom:1rem;line-height:1.6;padding:10px 14px;background:#f5f5f7;border-radius:10px}
+.booths{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.2rem}
+.booth-card{border:1px solid #e5e5ea;border-radius:14px;padding:12px 14px;cursor:pointer;background:#fff;transition:all 0.15s;position:relative;user-select:none}
+.booth-card:hover{border-color:#b0b0b8;background:#fafafa}
+.booth-card.sel-1{border:2px solid #534AB7;background:#EEEDFE}
+.booth-card.sel-2{border:2px solid #1D9E75;background:#E1F5EE}
+.booth-card.sel-3{border:2px solid #D85A30;background:#FAECE7}
+.booth-card.sel-4{border:2px solid #BA7517;background:#FAEEDA}
+.priority-badge{position:absolute;top:9px;right:9px;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.pb-1{background:#534AB7;color:#fff}.pb-2{background:#1D9E75;color:#fff}.pb-3{background:#D85A30;color:#fff}.pb-4{background:#BA7517;color:#fff}
+.booth-num{font-size:11px;color:#aeaeb2;margin-bottom:2px}
+.booth-name{font-size:13px;font-weight:600;color:#1d1d1f;line-height:1.35;margin-bottom:4px;padding-right:28px}
+.booth-desc{font-size:11px;color:#6e6e73;line-height:1.4;margin-bottom:7px}
+.count-bar-bg{height:3px;background:#f0f0f5;border-radius:2px;margin-bottom:4px}
+.count-bar{height:3px;border-radius:2px;transition:width 0.4s}
+.cb-ok{background:#534AB7}.cb-warn{background:#BA7517}.cb-over{background:#E24B4A}
+.count-text{font-size:11px;color:#6e6e73;display:flex;justify-content:space-between;align-items:center}
+.bdg{display:inline-block;font-size:10px;padding:1px 7px;border-radius:99px;font-weight:600}
+.bdg-full{background:#FFE5E5;color:#C0392B}.bdg-over{background:#FFF3E0;color:#8B4513}
+.bdg-warn{background:#FFF8E1;color:#7D5A00}.bdg-ok{background:#E8F5E9;color:#2E7D32}
+.priority-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1rem}
+.pl-item{display:flex;align-items:center;gap:5px;font-size:12px;color:#6e6e73}
+.pl-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0}
+.submit-btn{width:100%;padding:13px;font-size:15px;font-weight:600;border:none;border-radius:12px;background:#534AB7;color:#fff;cursor:pointer;transition:all 0.15s}
+.submit-btn:hover:not(:disabled){background:#3C3489}
+.submit-btn:disabled{opacity:0.35;cursor:not-allowed}
+.sel-summary{margin-bottom:1rem;padding:10px 14px;background:#f5f5f7;border-radius:10px;font-size:13px;color:#6e6e73;min-height:44px}
+.sel-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.chip{padding:4px 10px;border-radius:99px;font-size:12px;font-weight:500}
+.chip-1{background:#EEEDFE;color:#3C3489}.chip-2{background:#E1F5EE;color:#085041}.chip-3{background:#FAECE7;color:#712B13}.chip-4{background:#FAEEDA;color:#633806}
+.toast{padding:10px 18px;border-radius:12px;font-size:13px;display:none;text-align:center;margin:8px 0;font-weight:500}
+.toast.show{display:block}.toast.ok{background:#E8F5E9;color:#2E7D32;border:1px solid #c3e6cb}.toast.err{background:#FFE5E5;color:#C0392B;border:1px solid #f5c6cb}
+.rtable{width:100%;font-size:12px;border-collapse:collapse;margin-top:8px}
+.rtable th{padding:6px 8px;font-weight:600;color:#6e6e73;border-bottom:1px solid #e5e5ea;text-align:left;font-size:11px}
+.rtable td{padding:6px 8px;border-bottom:1px solid #f5f5f7;color:#1d1d1f;vertical-align:middle}
+.del-btn{font-size:11px;color:#C0392B;cursor:pointer;border:none;background:none;padding:0}
+.del-btn:hover{text-decoration:underline}
+.admin-btn{padding:9px 18px;font-size:13px;font-weight:500;border:1px solid #d1d1d6;border-radius:10px;background:#fff;color:#1d1d1f;cursor:pointer;transition:all 0.15s}
+.admin-btn:hover{background:#f5f5f7}
+.admin-btn.primary{background:#534AB7;color:#fff;border-color:#534AB7}
+.admin-btn.primary:hover{background:#3C3489}
+.admin-btn.danger{border-color:#E24B4A;color:#C0392B}
+.admin-btn.danger:hover{background:#FFE5E5}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.result-card{padding:11px 13px;border:1px solid #e5e5ea;border-radius:12px;background:#fafafa}
+.result-card-name{font-size:12px;font-weight:600;color:#1d1d1f;margin-bottom:5px}
+.at-tag{display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;font-weight:500;margin:1px 2px}
+.at-1{background:#EEEDFE;color:#3C3489}.at-2{background:#E1F5EE;color:#085041}.at-3{background:#FAECE7;color:#712B13}.at-4{background:#FAEEDA;color:#633806}
+.overflow-note{font-size:12px;color:#C0392B;padding:10px 12px;background:#FFE5E5;border-radius:10px;margin-bottom:10px}
+.lookup-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end}
+.lookup-btn{padding:10px 18px;font-size:13px;font-weight:600;border:none;border-radius:10px;background:#534AB7;color:#fff;cursor:pointer}
+.lookup-btn:hover{background:#3C3489}
+.schedule-card{border:1px solid #e5e5ea;border-radius:16px;overflow:hidden;margin-top:1rem}
+.sch-header{padding:16px 18px;background:#534AB7;color:#fff}
+.sch-header h2{font-size:17px;font-weight:600}
+.sch-header p{font-size:12px;opacity:0.85;margin-top:3px}
+.time-slot{display:grid;grid-template-columns:88px 1fr;border-bottom:1px solid #f0f0f5;background:#fff}
+.time-slot:last-child{border-bottom:none}
+.time-col{padding:14px 10px;background:#f5f5f7;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1px solid #e5e5ea}
+.time-round{font-size:10px;font-weight:600;color:#6e6e73;margin-bottom:2px}
+.time-val{font-size:14px;font-weight:600;color:#1d1d1f}
+.time-dur{font-size:10px;color:#aeaeb2;margin-top:2px}
+.booth-col{padding:14px 16px}
+.booth-col-num{font-size:11px;color:#aeaeb2;margin-bottom:2px}
+.booth-col-name{font-size:15px;font-weight:600;color:#1d1d1f;margin-bottom:4px}
+.booth-col-desc{font-size:12px;color:#6e6e73;line-height:1.4}
+.booth-col-tool{font-size:11px;color:#aeaeb2;margin-top:4px}
+.empty-slot{padding:14px 16px;background:#fafafa}
+.empty-slot p{font-size:13px;color:#aeaeb2}
+.info-box{padding:14px 16px;background:#f5f5f7;border-radius:10px;font-size:13px;color:#6e6e73;margin-top:12px}
+.err-box{padding:14px 16px;background:#FFE5E5;border-radius:10px;font-size:13px;color:#C0392B;margin-top:12px}
+.loading-overlay{display:none;position:fixed;inset:0;background:rgba(255,255,255,0.75);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.loading-overlay.show{display:flex}
+.spinner{width:36px;height:36px;border:3px solid #e5e5ea;border-top-color:#534AB7;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+@media(max-width:500px){.booths{grid-template-columns:1fr}.input-row{grid-template-columns:1fr}.result-grid{grid-template-columns:1fr}.lookup-row{grid-template-columns:1fr 1fr}.lookup-btn{grid-column:span 2}}
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <p id="loadingText" style="font-size:13px;color:#6e6e73">잠시만 기다려주세요...</p>
+</div>
+
+<div class="wrap">
+  <div class="header">
+    <h1>🔬 과학의 날 부스 체험 신청</h1>
+    <p>순천 왕지초 5·6학년 &nbsp;·&nbsp; 2026년 5월 11일(월) &nbsp;·&nbsp; 09:00~11:00</p>
+    <p style="margin-top:6px;font-size:12px" id="connStatus">
+      <span class="status-dot" style="background:#d1d1d6"></span>연결 중...
+    </p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('apply')">신청하기</button>
+    <button class="tab" onclick="switchTab('myschedule')">내 일정 확인</button>
+    <button class="tab" onclick="switchTab('status')">신청 현황</button>
+    <button class="tab" onclick="switchTab('admin')">배정 관리</button>
+  </div>
+
+  <!-- 신청하기 -->
+  <div id="page-apply" class="page active">
+    <div class="card">
+      <div class="section-label">신청자 정보</div>
+      <div class="input-row">
+        <input type="text" id="classInput" placeholder="반 번호 (예: 5-2)" maxlength="10">
+        <input type="text" id="nameInput" placeholder="이름" maxlength="10">
+      </div>
+      <div class="hint">원하는 부스를 <strong>우선순위 순서대로 최대 4개</strong> 선택하세요.<br>정원 초과 시 우선순위가 높은 부스로 자동 배정됩니다.</div>
+      <div class="priority-legend">
+        <div class="pl-item"><div class="pl-dot" style="background:#534AB7"></div>1순위</div>
+        <div class="pl-item"><div class="pl-dot" style="background:#1D9E75"></div>2순위</div>
+        <div class="pl-item"><div class="pl-dot" style="background:#D85A30"></div>3순위</div>
+        <div class="pl-item"><div class="pl-dot" style="background:#BA7517"></div>4순위</div>
+      </div>
+      <div class="booths" id="boothGrid"></div>
+      <div class="sel-summary" id="selSummary"><span style="color:#aeaeb2">선택한 부스가 없습니다</span></div>
+      <div class="toast" id="toast"></div>
+      <button class="submit-btn" id="submitBtn" disabled onclick="submitRegistration()">신청하기</button>
+    </div>
+  </div>
+
+  <!-- 내 일정 확인 -->
+  <div id="page-myschedule" class="page">
+    <div class="card">
+      <div class="section-label">내 체험 일정 조회</div>
+      <div class="lookup-row">
+        <input type="text" id="lookupClass" placeholder="반 번호 (예: 5-2)" maxlength="10">
+        <input type="text" id="lookupName" placeholder="이름" maxlength="10">
+        <button class="lookup-btn" onclick="lookupSchedule()">확인</button>
+      </div>
+    </div>
+    <div id="scheduleResult"></div>
+  </div>
+
+  <!-- 신청 현황 -->
+  <div id="page-status" class="page">
+    <div id="statusContent"><div class="card"><p style="font-size:13px;color:#6e6e73">불러오는 중...</p></div></div>
+  </div>
+
+  <!-- 배정 관리 -->
+  <div id="page-admin" class="page">
+    <div class="card">
+      <div class="section-label">랜덤 배정 실행</div>
+      <p style="font-size:12px;color:#6e6e73;margin-bottom:14px;line-height:1.6">신청 마감 후 실행하세요. 정원 이내 학생은 1순위로 배정되고, 초과 시 랜덤 추첨 후 다음 순위로 이동합니다.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="admin-btn primary" onclick="runAssignment()">배정 실행</button>
+        <button class="admin-btn" onclick="clearAssignment()">배정 초기화</button>
+        <button class="admin-btn danger" onclick="clearAll()">전체 초기화</button>
+      </div>
+    </div>
+    <div id="assignResult"></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, writeBatch, collection } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD6UC4IEfMF8QvSOGKj5OuV7PUCpgj1HIk",
+  authDomain: "science-project-79f5d.firebaseapp.com",
+  projectId: "science-project-79f5d",
+  storageBucket: "science-project-79f5d.firebasestorage.app",
+  messagingSenderId: "116477805962",
+  appId: "1:116477805962:web:defa40edb474e57bc9b473"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const BOOTHS = [
+  {id:1,name:"새로운 미래 세상",desc:"홀로렌즈·VR로 미래 기술 체험",tool:"오큘러스",max:14},
+  {id:2,name:"데이터 분석 로봇!",desc:"AI 모델로 이상기후 분류 프로그래밍",tool:"티처블머신·핑퐁",max:14},
+  {id:3,name:"스마트 시티 디자인",desc:"전자모듈보드로 환경 관리 시스템 설계",tool:"할로코드",max:14},
+  {id:4,name:"우주 탐사 로봇 제작",desc:"AI 탐사 로봇 제작 및 미션 해결",tool:"엠봇2",max:14},
+  {id:5,name:"메이킹 프로젝트",desc:"문제해결 로봇 제작 및 프로그래밍",tool:"레고스파이크 프라임",max:14},
+  {id:6,name:"프롬프트 엔지니어 (컵 만들기)",desc:"생성형 AI 이미지 메이킹·컵 제작 체험",tool:"생성형 AI",max:13},
+  {id:7,name:"드론 프로젝트",desc:"멸종위기 동물 구하는 드론 루트 미션",tool:"드론·장애물",max:14},
+  {id:8,name:"로봇 슈터 챔피언십",desc:"안성형 로봇 대항 경기 — 협업·전략",tool:"벡스",max:14},
+  {id:9,name:"AI 자율주행 모빌리티",desc:"미래 스마트카 기능 설계 체험",tool:"알티노",max:14},
+  {id:10,name:"바다 빛 키링 (키링 만들기)",desc:"씨글라스 활용 키링 제작 체험",tool:"씨글라스",max:13},
+];
+const TIME_SLOTS = [
+  {round:1,start:"09:00",end:"09:20"},
+  {round:2,start:"09:30",end:"09:50"},
+  {round:3,start:"10:00",end:"10:20"},
+  {round:4,start:"10:30",end:"10:50"},
+];
+const ACCENT = ['#534AB7','#1D9E75','#D85A30','#BA7517'];
+
+let regs = {};
+let selectedPriority = [];
+let currentTab = 'apply';
+
+function showLoading(msg){
+  document.getElementById('loadingText').textContent = msg||'처리 중...';
+  document.getElementById('loadingOverlay').classList.add('show');
+}
+function hideLoading(){ document.getElementById('loadingOverlay').classList.remove('show'); }
+
+// 실시간 리스너
+onSnapshot(collection(db,'registrations'), snap => {
+  regs = {};
+  snap.forEach(d => { regs[d.id] = d.data(); });
+  document.getElementById('connStatus').innerHTML = '<span class="status-dot" style="background:#34C759"></span>실시간 연결됨';
+  renderBooths();
+  if(currentTab==='status') renderStatus();
+  if(currentTab==='admin') renderAdminResult();
+}, err => {
+  document.getElementById('connStatus').innerHTML = '<span class="status-dot" style="background:#FF3B30"></span>연결 오류 — 새로고침 해주세요';
+});
+
+function getApplicants(boothId){ return Object.values(regs).filter(r=>r.priorities&&r.priorities.includes(boothId)); }
+
+function renderBooths(){
+  const grid = document.getElementById('boothGrid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  BOOTHS.forEach(b => {
+    const cnt = getApplicants(b.id).length;
+    const pct = Math.min(cnt/b.max,1);
+    const isOver = cnt>b.max;
+    const selIdx = selectedPriority.indexOf(b.id);
+    const barCls = isOver?'count-bar cb-over':pct>=0.7?'count-bar cb-warn':'count-bar cb-ok';
+    const badge = isOver
+      ? `<span class="bdg bdg-over">초과 ${cnt-b.max}명</span>`
+      : cnt>=b.max ? `<span class="bdg bdg-full">마감</span>`
+      : pct>=0.7 ? `<span class="bdg bdg-warn">마감 임박</span>` : '';
+    const pb = selIdx>=0 ? `<div class="priority-badge pb-${selIdx+1}">${selIdx+1}</div>` : '';
+    const selCls = selIdx>=0 ? ` sel-${selIdx+1}` : '';
+    const card = document.createElement('div');
+    card.className = `booth-card${selCls}`;
+    card.innerHTML = `${pb}<div class="booth-num">부스 ${b.id}</div><div class="booth-name">${b.name}</div><div class="booth-desc">${b.desc}</div><div class="count-bar-bg"><div class="${barCls}" style="width:${pct*100}%"></div></div><div class="count-text">${badge}<span>${cnt} / ${b.max}명</span></div>`;
+    card.onclick = () => toggleBooth(b.id);
+    grid.appendChild(card);
+  });
+}
+
+function toggleBooth(id){
+  const idx = selectedPriority.indexOf(id);
+  if(idx>=0){ selectedPriority.splice(idx,1); }
+  else{
+    if(selectedPriority.length>=4){ showToast('최대 4개까지 선택할 수 있어요.',true); return; }
+    selectedPriority.push(id);
+  }
+  renderBooths(); renderSelSummary(); checkSubmit();
+}
+
+function renderSelSummary(){
+  const el = document.getElementById('selSummary');
+  if(selectedPriority.length===0){ el.innerHTML='<span style="color:#aeaeb2">선택한 부스가 없습니다</span>'; return; }
+  const labels=['1순위','2순위','3순위','4순위'];
+  const cls=['chip-1','chip-2','chip-3','chip-4'];
+  const chips = selectedPriority.map((id,i)=>`<span class="chip ${cls[i]}">${labels[i]} ${BOOTHS.find(b=>b.id===id).name}</span>`).join('');
+  el.innerHTML = `<div style="font-size:11px;color:#6e6e73;margin-bottom:5px">선택한 부스 (클릭하면 해제)</div><div class="sel-chips">${chips}</div>`;
+}
+
+function checkSubmit(){
+  const cls = document.getElementById('classInput').value.trim();
+  const name = document.getElementById('nameInput').value.trim();
+  document.getElementById('submitBtn').disabled = !(cls&&name&&selectedPriority.length>0);
+}
+
+document.getElementById('classInput').addEventListener('input',checkSubmit);
+document.getElementById('nameInput').addEventListener('input',checkSubmit);
+
+function showToast(msg,isErr){
+  const t = document.getElementById('toast');
+  t.textContent=msg; t.className='toast show '+(isErr?'err':'ok');
+  setTimeout(()=>{t.className='toast';},3000);
+}
+
+window.submitRegistration = async function(){
+  const cls = document.getElementById('classInput').value.trim();
+  const name = document.getElementById('nameInput').value.trim();
+  if(!cls||!name||!selectedPriority.length) return;
+  const docId = `${cls}_${name}`.replace(/\s+/g,'_');
+  showLoading('신청 중...');
+  try{
+    const existing = await getDoc(doc(db,'registrations',docId));
+    if(existing.exists()){ hideLoading(); showToast('이미 신청되어 있어요!',true); return; }
+    await setDoc(doc(db,'registrations',docId),{
+      class:cls, name,
+      priorities:[...selectedPriority],
+      time:new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}),
+      timestamp:Date.now(),
+      assigned:null,
+      scheduleSlots:null
+    });
+    hideLoading();
+    showToast(`${cls} ${name}님 신청 완료!`);
+    document.getElementById('classInput').value='';
+    document.getElementById('nameInput').value='';
+    selectedPriority=[];
+    renderBooths(); renderSelSummary(); checkSubmit();
+  } catch(e){ hideLoading(); showToast('오류가 발생했어요. 다시 시도해주세요.',true); }
+};
+
+window.lookupSchedule = async function(){
+  const cls = document.getElementById('lookupClass').value.trim();
+  const name = document.getElementById('lookupName').value.trim();
+  const el = document.getElementById('scheduleResult');
+  if(!cls||!name){ el.innerHTML='<div class="err-box">반 번호와 이름을 모두 입력해주세요.</div>'; return; }
+  showLoading('조회 중...');
+  try{
+    const docId = `${cls}_${name}`.replace(/\s+/g,'_');
+    const snap = await getDoc(doc(db,'registrations',docId));
+    hideLoading();
+    if(!snap.exists()){ el.innerHTML='<div class="err-box">신청 내역을 찾을 수 없어요.<br>반 번호와 이름을 다시 확인해주세요.</div>'; return; }
+    const reg = snap.data();
+    if(!reg.scheduleSlots){
+      const chips = (reg.priorities||[]).map((id,i)=>{
+        const c=['chip-1','chip-2','chip-3','chip-4'];
+        const l=['1순위','2순위','3순위','4순위'];
+        return `<span class="chip ${c[i]}" style="font-size:11px">${l[i]} ${BOOTHS.find(b=>b.id===id)?.name||id}</span>`;
+      }).join('');
+      el.innerHTML=`<div class="schedule-card"><div class="sch-header"><h2>${reg.class} ${reg.name}님</h2><p>신청 시각 ${reg.time} · 배정 대기 중</p></div><div style="padding:16px"><p style="font-size:12px;color:#6e6e73;margin-bottom:8px">선택한 우선순위</p><div class="sel-chips">${chips}</div><div class="info-box" style="margin-top:12px">아직 배정이 완료되지 않았어요.<br>선생님이 배정을 실행하면 체험 순서를 확인할 수 있어요.</div></div></div>`;
+      return;
+    }
+    const slots = reg.scheduleSlots;
+    const rows = TIME_SLOTS.map((ts,i)=>{
+      const bid = slots[i];
+      if(!bid) return `<div class="time-slot"><div class="time-col"><div class="time-round">${ts.round}회차</div><div class="time-val">${ts.start}</div><div class="time-dur">~${ts.end}</div></div><div class="empty-slot"><p>이동 · 휴식</p></div></div>`;
+      const b = BOOTHS.find(x=>x.id===bid);
+      return `<div class="time-slot"><div class="time-col" style="border-left:3px solid ${ACCENT[i]}"><div class="time-round">${ts.round}회차</div><div class="time-val">${ts.start}</div><div class="time-dur">~${ts.end}</div></div><div class="booth-col"><div class="booth-col-num">부스 ${b.id}</div><div class="booth-col-name">${b.name}</div><div class="booth-col-desc">${b.desc}</div><div class="booth-col-tool">${b.tool}</div></div></div>`;
+    }).join('');
+    const assignedB = reg.assigned ? BOOTHS.find(b=>b.id===reg.assigned) : null;
+    el.innerHTML=`<div class="schedule-card"><div class="sch-header"><h2>${reg.class} ${reg.name}님의 체험 일정</h2><p>${assignedB?`배정 부스: ${assignedB.name}`:'배정 완료'}</p></div><div>${rows}</div></div>`;
+  } catch(e){ hideLoading(); document.getElementById('scheduleResult').innerHTML='<div class="err-box">오류가 발생했어요. 다시 시도해주세요.</div>'; }
+};
+
+function renderStatus(){
+  const el = document.getElementById('statusContent');
+  const arr = Object.values(regs);
+  if(!arr.length){ el.innerHTML='<div class="card"><p style="font-size:13px;color:#6e6e73">아직 신청 내역이 없습니다.</p></div>'; return; }
+  const bRows = BOOTHS.map(b=>{
+    const cnt=getApplicants(b.id).length; const pct=cnt/b.max; const isOver=cnt>b.max;
+    const bc=isOver?'bdg-over':cnt>=b.max?'bdg-full':pct>=0.7?'bdg-warn':'bdg-ok';
+    const lbl=isOver?`초과 ${cnt-b.max}명`:cnt>=b.max?'마감':pct>=0.7?'마감 임박':'여유';
+    return `<tr><td style="color:#aeaeb2">부스 ${b.id}</td><td>${b.name}</td><td>${cnt} / ${b.max}</td><td><span class="bdg ${bc}">${lbl}</span></td></tr>`;
+  }).join('');
+  const sorted = arr.sort((a,b)=>a.timestamp-b.timestamp);
+  const rRows = sorted.map(r=>{
+    const chips=(r.priorities||[]).map((id,pi)=>{
+      const c=['at-1','at-2','at-3','at-4']; const l=['1순','2순','3순','4순'];
+      return `<span class="at-tag ${c[pi]}">${l[pi]} ${BOOTHS.find(b=>b.id===id)?.name||id}</span>`;
+    }).join('');
+    const asgn = r.assigned ? `<span class="at-tag at-1">${BOOTHS.find(b=>b.id===r.assigned)?.name}</span>` : `<span style="font-size:11px;color:#aeaeb2">미배정</span>`;
+    const docId = `${r.class}_${r.name}`.replace(/\s+/g,'_');
+    return `<tr><td>${r.class} ${r.name}</td><td style="line-height:2">${chips}</td><td>${asgn}</td><td><button class="del-btn" onclick="deleteReg('${docId}')">취소</button></td></tr>`;
+  }).join('');
+  el.innerHTML=`<div class="card"><p style="font-size:13px;font-weight:600;margin-bottom:8px">부스별 신청 현황</p><table class="rtable"><thead><tr><th></th><th>부스명</th><th>신청 인원</th><th>상태</th></tr></thead><tbody>${bRows}</tbody></table></div><div class="card"><p style="font-size:13px;font-weight:600;margin-bottom:8px">전체 신청자 (${arr.length}명)</p><table class="rtable"><thead><tr><th>이름</th><th>우선순위</th><th>배정</th><th></th></tr></thead><tbody>${rRows}</tbody></table></div>`;
+}
+
+window.deleteReg = async function(docId){
+  if(!confirm('신청을 취소할까요?')) return;
+  showLoading('취소 중...');
+  try{ await deleteDoc(doc(db,'registrations',docId)); hideLoading(); }
+  catch(e){ hideLoading(); alert('오류가 발생했어요.'); }
+};
+
+window.runAssignment = async function(){
+  const arr = Object.entries(regs);
+  if(!arr.length){ alert('신청자가 없습니다.'); return; }
+  if(!confirm(`${arr.length}명을 대상으로 배정을 실행할까요?`)) return;
+  showLoading('배정 중...');
+  try{
+    const assigned = {}; BOOTHS.forEach(b=>assigned[b.id]=[]);
+    const shuffled = [...arr].sort(()=>Math.random()-0.5);
+    const result = {}; shuffled.forEach(([k])=>{ result[k]={assigned:null}; });
+    for(let round=0;round<4;round++){
+      shuffled.forEach(([k,r])=>{
+        if(result[k].assigned!=null) return;
+        const pref = r.priorities?.[round]; if(pref==null) return;
+        const b = BOOTHS.find(x=>x.id===pref);
+        if(assigned[pref].length<b.max){ assigned[pref].push(k); result[k].assigned=pref; }
+      });
+    }
+    // 회차 슬롯: 배정된 부스 학생들을 4그룹으로 나눔
+    const slots = {}; shuffled.forEach(([k])=>{ slots[k]=[null,null,null,null]; });
+    BOOTHS.forEach(b=>{
+      const students = [...assigned[b.id]].sort(()=>Math.random()-0.5);
+      const perRound = Math.ceil(students.length/4);
+      students.forEach((k,idx)=>{
+        const ri = perRound>0 ? Math.min(Math.floor(idx/perRound),3) : 0;
+        slots[k][ri] = b.id;
+      });
+    });
+    const batch = writeBatch(db);
+    shuffled.forEach(([k])=>{
+      batch.update(doc(db,'registrations',k),{ assigned:result[k].assigned, scheduleSlots:slots[k] });
+    });
+    await batch.commit();
+    hideLoading(); renderAdminResult(); alert('배정이 완료됐습니다!');
+  } catch(e){ hideLoading(); alert('오류: '+e.message); }
+};
+
+window.clearAssignment = async function(){
+  if(!confirm('배정 결과를 초기화할까요?')) return;
+  showLoading('초기화 중...');
+  try{
+    const batch = writeBatch(db);
+    Object.keys(regs).forEach(k=>{ batch.update(doc(db,'registrations',k),{assigned:null,scheduleSlots:null}); });
+    await batch.commit(); hideLoading(); renderAdminResult();
+  } catch(e){ hideLoading(); alert('오류: '+e.message); }
+};
+
+window.clearAll = async function(){
+  if(!confirm('⚠️ 모든 신청 데이터를 삭제할까요?\n되돌릴 수 없습니다.')) return;
+  showLoading('전체 삭제 중...');
+  try{
+    const batch = writeBatch(db);
+    Object.keys(regs).forEach(k=>{ batch.delete(doc(db,'registrations',k)); });
+    await batch.commit();
+    selectedPriority=[]; renderBooths(); renderSelSummary(); checkSubmit();
+    hideLoading(); renderAdminResult();
+  } catch(e){ hideLoading(); alert('오류: '+e.message); }
+};
+
+function renderAdminResult(){
+  const el = document.getElementById('assignResult');
+  if(!el) return;
+  const arr = Object.values(regs);
+  if(!arr.some(r=>r.assigned!=null)){ el.innerHTML='<div class="card"><p style="font-size:13px;color:#6e6e73">배정 실행 전입니다. 신청 마감 후 "배정 실행"을 누르세요.</p></div>'; return; }
+  const unassigned = arr.filter(r=>r.assigned==null);
+  const overHtml = unassigned.length ? `<div class="overflow-note">배정되지 못한 학생 ${unassigned.length}명: ${unassigned.map(r=>`${r.class} ${r.name}`).join(', ')}</div>` : '';
+  const cards = BOOTHS.map(b=>{
+    const members = arr.filter(r=>r.assigned===b.id);
+    if(!members.length) return `<div class="result-card"><div class="result-card-name">부스 ${b.id} ${b.name}</div><p style="font-size:11px;color:#aeaeb2">배정 없음</p></div>`;
+    const tags = members.map(r=>`<span class="at-tag at-1">${r.class} ${r.name}</span>`).join(' ');
+    return `<div class="result-card"><div class="result-card-name">부스 ${b.id} ${b.name} <span style="font-weight:400;color:#6e6e73">${members.length}명</span></div><div style="line-height:2.2;margin-top:4px">${tags}</div></div>`;
+  }).join('');
+  el.innerHTML=`<div class="card">${overHtml}<p style="font-size:13px;font-weight:600;margin-bottom:10px">배정 결과</p><div class="result-grid">${cards}</div></div>`;
+}
+
+window.switchTab = function(t){
+  currentTab = t;
+  const tabs=['apply','myschedule','status','admin'];
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab')[tabs.indexOf(t)].classList.add('active');
+  document.getElementById('page-'+t).classList.add('active');
+  if(t==='status') renderStatus();
+  if(t==='admin') renderAdminResult();
+};
+
+renderBooths();
+</script>
+</body>
+</html>
